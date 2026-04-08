@@ -1,0 +1,52 @@
+﻿using Microsoft.Xna.Framework;
+using Terraria;
+using Terraria.ID;
+using Terraria.ModLoader;
+
+namespace ConstellationsOfOrion.Content.Projectiles
+{
+	public class StarangProj : ModProjectile
+	{
+		public override void SetStaticDefaults()
+		{
+			DisplayName.SetDefault("Starang");
+		}
+
+		public override void SetDefaults()
+		{
+			Projectile.width = 26;
+			Projectile.height = 26;
+
+			Projectile.friendly = true;
+			Projectile.DamageType = DamageClass.Melee;
+
+			Projectile.penetrate = -1;
+
+			Projectile.aiStyle = 3; // ⭐ BOOMERANG AI
+			AIType = ProjectileID.EnchantedBoomerang;
+
+			Projectile.timeLeft = 300;
+		}
+
+		public override void AI()
+		{
+			// ⭐ ROTATION
+			Projectile.rotation += 0.4f * Projectile.direction;
+
+			// ⭐ LIGHT STAR EFFECT
+			if (Main.rand.NextBool(4))
+			{
+				Dust dust = Dust.NewDustDirect(
+					Projectile.position,
+					Projectile.width,
+					Projectile.height,
+					DustID.GemAmethyst
+				);
+
+				dust.noGravity = true;
+				dust.scale = 1.1f;
+				dust.velocity *= 0.3f;
+			}
+		}
+	}
+}

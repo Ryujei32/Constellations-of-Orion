@@ -1,0 +1,85 @@
+Items: {
+}
+
+OrionBow: {
+}
+
+OrionLeggings: {
+}
+
+OrionHelmet: {
+}
+
+OrionChestplate: {
+}
+
+ConstelliteOre: {
+}
+
+ConstelliteBar: {
+}
+
+HeliosSword: {
+}
+
+OrionSlimeSummon: {
+}
+
+StarliteSlimeBanner: {
+}
+
+Starlite: {
+}
+
+ConstelliteArrow: {
+}
+
+AstraeusBow: {
+}
+
+ConstelliteBullet: {
+}
+
+AetherGun: {
+}
+
+ToxicDaybreak: {
+}
+
+CosmicDaybreak: {
+}
+
+ConstellitePickaxe: {
+}
+
+ConstelliteAxe: {
+}
+
+ConstelliteHammer: {
+}
+
+GelatinousSpray: {
+}
+
+StellarLash: {
+}
+
+StarrySundae: {
+}
+
+Tiles: {
+}
+
+WorldGen: {
+}
+
+NPCs: {
+}
+
+Mods.ConstellationsOfOrion.Projectiles.GelBubbleVFXOrb.DisplayName: Gel Bubble V F X Orb
+
+Buffs: {
+}
+
+StarryPrinceBuff: {
+}

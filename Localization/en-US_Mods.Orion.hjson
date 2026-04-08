@@ -1,0 +1,27 @@
+Mods: {
+	ConstellationsOfOrion: {
+		Items: {
+			OrionLeggings: {
+				DisplayName: Orion Leggings
+				Tooltip: ""
+			}
+
+			OrionHelmet: {
+				DisplayName: Orion Helmet
+				Tooltip: ""
+			}
+
+			OrionChestplate: {
+				DisplayName: Orion Chestplate
+				Tooltip: ""
+			}
+
+			OrionBow: {
+				DisplayName: Orion Bow
+				Tooltip: ""
+			}
+		}
+
+		Tiles.ConstelliteOreTile.MapEntry: Constellite Ore
+	}
+}

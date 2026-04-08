@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v8.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v8.0": {
+      "ConstellationsOfOrion/1.0.0": {
+        "runtime": {
+          "ConstellationsOfOrion.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "ConstellationsOfOrion/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

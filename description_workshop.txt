@@ -1,0 +1,28 @@
+This is the Constellations of Orion, a very small mod that adds stuff to the game
+
+Expect pretty cool star like stuff
+
+Currently a beta of the mod, for now the mod only adds
+
+16 Items
+1 NPC
+3 Tiles
+1 Beta pet
+1 Beta whip
+
+To craft the items you will need the Constellite bars, the ore will Spawn after defeating the Wall of Flash
+
+
+I will add more content to this, any feedback and ideas you guys have just leave on the comments
+
+
+~ Credits goes to ~
+
+Lead Artist: VoidTV
+
+@cz43, @Exlueterra, @GalesyFailsy, @VoidTV and
+@Gurkolix for sprites
+
+@MaxZet, @MT and @Gurkolix for codding
+
+Thank you and enjoy the mod

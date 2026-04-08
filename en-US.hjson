@@ -1,0 +1,155 @@
+Mods: {
+	ConstellationsOfOrion: {
+		Items: {
+			OrionBow: {
+				DisplayName: Orion Bow
+				Tooltip: ""
+			}
+
+			OrionLeggings: {
+				DisplayName: Orion Leggings
+				Tooltip: ""
+			}
+
+			OrionHelmet: {
+				DisplayName: Orion Helmet
+				Tooltip: ""
+			}
+
+			OrionChestplate: {
+				DisplayName: Orion Chestplate
+				Tooltip: ""
+			}
+
+			ConstelliteOre: {
+				DisplayName: Constellite Ore
+				Tooltip: ""
+			}
+
+			ConstelliteBar: {
+				DisplayName: Constellite Bar
+				Tooltip: ""
+			}
+
+			HeliosSword: {
+				DisplayName: Helios Sword
+				Tooltip: ""
+			}
+
+			OrionSlimeSummon: {
+				Tooltip: ""
+				DisplayName: Orion Slime Summon
+			}
+
+			StarliteSlimeBanner: {
+				DisplayName: Starlite Slime Banner
+				Tooltip: ""
+			}
+
+			Starlite: {
+				DisplayName: Starlite
+				Tooltip: ""
+			}
+
+			ConstelliteArrow: {
+				DisplayName: Constellite Arrow
+				Tooltip: ""
+			}
+
+			AstraeusBow: {
+				DisplayName: Astraeus Bow
+				Tooltip: ""
+			}
+
+			ConstelliteBullet: {
+				DisplayName: Constellite Bullet
+				Tooltip: ""
+			}
+
+			AetherGun: {
+				DisplayName: Aether Gun
+				Tooltip: ""
+			}
+
+			ToxicDaybreak: {
+				DisplayName: Toxic Daybreak
+				Tooltip: ""
+			}
+
+			CosmicDaybreak: {
+				DisplayName: Cosmic Daybreak
+				Tooltip: ""
+			}
+
+			ConstellitePickaxe: {
+				DisplayName: Constellite Pickaxe
+				Tooltip: ""
+			}
+
+			ConstelliteAxe: {
+				DisplayName: Constellite Axe
+				Tooltip: ""
+			}
+
+			ConstelliteHammer: {
+				DisplayName: Constellite Hammer
+				Tooltip: ""
+			}
+
+			GelatinousSpray: {
+				DisplayName: Gelatinous Spray
+				Tooltip: Shoot out a spread of gel balls
+			}
+
+			StellarLash: {
+				DisplayName: Stellar Lash
+				Tooltip: Slap your foes with stellar energy
+			}
+
+			StarrySundae: {
+				DisplayName: Starry Sundae
+				Tooltip: ""
+			}
+
+			Starang: {
+				DisplayName: Starang
+				Tooltip: ""
+			}
+		}
+
+		Tiles: {
+			ConstelliteOreTile.MapEntry: Constellite Ore
+			StarliteSlimeBannerTile.MapEntry: Starlite Slime Banner Tile
+			ConstelliteBarTile.MapEntry: Constellite Bar Tile
+		}
+
+		WorldGen: {
+			BlessedWithConstelliteOreMessage: Mods.ConstellationsOfOrion.WorldGen.BlessedWithConstelliteOreMessage
+			ConstelliteOrePassMessage: Mods.ConstellationsOfOrion.WorldGen.ConstelliteOrePassMessage
+		}
+
+		NPCs: {
+			StarlitSlime.DisplayName: Starlit Slime
+			StarliteSlime.DisplayName: Starlite Slime
+		}
+
+		Projectiles: {
+			ConstelliteArrowProj.DisplayName: Constellite Arrow Proj
+			ConstelliteBulletProj.DisplayName: Constellite Bullet Proj
+			ToxicDaybreakProj.DisplayName: Toxic Daybreak Proj
+			CosmicDaybreakProj.DisplayName: Cosmic Daybreak Proj
+			GelBubble1.DisplayName: Gel Bubble1
+			GelBubble2.DisplayName: Gel Bubble2
+			StellarLashProj.DisplayName: Stellar Lash Proj
+			StarryPrincePet.DisplayName: Starry Prince Pet
+			StarangProj.DisplayName: Starang Proj
+		}
+
+		Buffs: {
+			StarryPrinceBuff: {
+				DisplayName: Starry Prince Buff
+				Description: The Starry prince is following you
+			}
+		}
+	}
+}

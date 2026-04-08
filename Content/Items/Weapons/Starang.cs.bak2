@@ -1,0 +1,115 @@
+﻿using Terraria;
+using Terraria.ID;
+using Terraria.ModLoader;
+using Terraria.DataStructures;
+using Microsoft.Xna.Framework;
+using System.Collections.Generic;
+
+namespace ConstellationsOfOrion.Content.Items.Weapons
+{
+	public class Starang : ModItem
+	{
+		// ⭐ Tracks remaining throws
+		private int throwsLeft = 6;
+
+		public override void SetStaticDefaults()
+		{
+			DisplayName.SetDefault("Starang");
+			Item.ResearchUnlockCount = 1;
+		}
+
+		public override void SetDefaults()
+		{
+			Item.width = 32;
+			Item.height = 32;
+
+			Item.damage = 68;
+			Item.DamageType = DamageClass.Melee;
+
+			Item.useTime = 20;
+			Item.useAnimation = 20;
+			Item.useStyle = ItemUseStyleID.Swing;
+
+			Item.noUseGraphic = true;
+			Item.noMelee = true;
+
+			Item.knockBack = 5f;
+
+			Item.value = Item.buyPrice(gold: 5);
+			Item.rare = ItemRarityID.Pink;
+
+			Item.UseSound = SoundID.Item1;
+
+			Item.autoReuse = true;
+
+			Item.shoot = ModContent.ProjectileType<Content.Projectiles.StarangProj>();
+			Item.shootSpeed = 14f;
+		}
+
+		public override void ModifyTooltips(List<TooltipLine> tooltips)
+		{
+			tooltips.Add(new TooltipLine(Mod, "Effect",
+				"Can be thrown up to 6 times before needing to recharge"));
+		}
+
+		public override bool CanUseItem(Player player)
+		{
+			// ⭐ MUST WAIT FOR RETURN
+			if (player.ownedProjectileCounts[Item.shoot] > 0)
+				return false;
+
+			// ⭐ RESET AFTER 6 THROWS
+			if (throwsLeft <= 0)
+			{
+				throwsLeft = 6;
+
+				// small delay before reuse
+				player.itemTime = 30;
+				player.itemAnimation = 30;
+
+				return false;
+			}
+
+			return true;
+		}
+
+		public override bool Shoot(Player player,
+			EntitySource_ItemUse_WithAmmo source,
+			Vector2 position,
+			Vector2 velocity,
+			int type,
+			int damage,
+			float knockback)
+		{
+			throwsLeft--;
+
+			Projectile.NewProjectile(
+				source,
+				position,
+				velocity,
+				type,
+				damage,
+				knockback,
+				player.whoAmI
+			);
+
+			return false;
+		}
+
+		public override void UpdateInventory(Player player)
+		{
+			// ⭐ SAFETY RESET (prevents getting stuck)
+			if (throwsLeft < 0 || throwsLeft > 6)
+				throwsLeft = 6;
+		}
+
+		public override void AddRecipes()
+		{
+			CreateRecipe()
+				.AddIngredient(ModContent.ItemType<Content.Items.Materials.ConstelliteBar>(), 5)
+				.AddIngredient(ItemID.FallenStar, 2)
+				.AddTile(TileID.MythrilAnvil)
+				.Register();
+		}
+	}
+}
