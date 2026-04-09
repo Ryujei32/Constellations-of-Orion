@@ -1,8 +1,12 @@
-# Garbage, mac
+# Garbage,mac;<
 .DS_Store
 .AppleDouble
 .LSOverride
 ._*
+*.bak
+*.tmp
+*.old
+*.svclog
 
 # Not important
 Effects/compile.sh
