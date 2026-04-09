@@ -7,6 +7,7 @@ using Terraria;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Core;
 using static Terraria.ModLoader.Core.TmodFile;
+using ReLogic.Content;
 
 namespace ConstellationsOfOrion.Effects
 {
@@ -29,15 +30,25 @@ namespace ConstellationsOfOrion.Effects
 				if (name.Equals("SlimePetImpactShockwave", System.StringComparison.OrdinalIgnoreCase))
 					continue;
 
-				LoadShader(name, path);
+				LoadScreenShader(name, path);
 			}
+
+
+			LoadMiscShader("Flame");
 		}
 
-		private void LoadShader(string name, string path)
+		private void LoadScreenShader(string name, string path)
 		{
 			Ref<Effect> shaderRef = new Ref<Effect>(Mod.Assets.Request<Effect>(path, ReLogic.Content.AssetRequestMode.ImmediateLoad).Value);
 			Filters.Scene[name] = new Filter(new ScreenShaderData(shaderRef, name + "Pass"), EffectPriority.High);
 			Filters.Scene[name].Load();
+		}
+
+		private void LoadMiscShader(string name, string pass = null)
+		{
+			var shaderAsset = ModContent.Request<Effect>("ConstellationsOfOrion/Effects/" + name, AssetRequestMode.ImmediateLoad);
+			var shaderData = new MiscShaderData(shaderAsset, pass ?? name);
+			GameShaders.Misc["ConstellationsOfOrion:" + name] = shaderData;
 		}
 	}
 }
