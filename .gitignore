@@ -1,5 +1,8 @@
-# Garbage
+# Garbage, mac
 .DS_Store
+.AppleDouble
+.LSOverride
+._*
 
 # Not important
 Effects/compile.sh
