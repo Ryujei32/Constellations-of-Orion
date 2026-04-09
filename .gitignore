@@ -3,3 +3,6 @@
 
 # Not important
 Effects/compile.sh
+
+# Dont think we need this :/
+obj/
