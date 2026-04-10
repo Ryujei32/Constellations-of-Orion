@@ -33,14 +33,15 @@ namespace ConstellationsOfOrion.Effects
 				LoadScreenShader(name, path);
 			}
 
-
-			LoadMiscShader("Flame");
+			// manual misc shader loading
+			LoadMiscShader("Flame", "FlamePass");
 		}
 
 		private void LoadScreenShader(string name, string path)
 		{
-			Ref<Effect> shaderRef = new Ref<Effect>(Mod.Assets.Request<Effect>(path, ReLogic.Content.AssetRequestMode.ImmediateLoad).Value);
-			Filters.Scene[name] = new Filter(new ScreenShaderData(shaderRef, name + "Pass"), EffectPriority.High);
+			var shaderAsset = Mod.Assets.Request<Effect>(path, AssetRequestMode.ImmediateLoad);
+			var screenshaderData = new ScreenShaderData(shaderAsset, name + "Pass");
+			Filters.Scene[name] = new Filter(screenshaderData, EffectPriority.High);
 			Filters.Scene[name].Load();
 		}
 
