@@ -34,7 +34,12 @@ namespace ConstellationsOfOrion.Effects
 			}
 
 			// manual misc shader loading
-			LoadMiscShader("Flame", "FlamePass");
+
+			LoadMiscShader("BaseVertex", out MiscShaderData baseVertexShader);
+			baseVertexShader.UseOpacity(1f); // load defaults
+			baseVertexShader.UseSaturation(1f);
+
+			LoadMiscShader("Flame", out MiscShaderData flameShader);
 		}
 
 		private void LoadScreenShader(string name, string path)
@@ -45,10 +50,10 @@ namespace ConstellationsOfOrion.Effects
 			Filters.Scene[name].Load();
 		}
 
-		private void LoadMiscShader(string name, string pass = null)
+		private void LoadMiscShader(string name, out MiscShaderData shaderData, string pass = null)
 		{
 			var shaderAsset = ModContent.Request<Effect>("ConstellationsOfOrion/Effects/" + name, AssetRequestMode.ImmediateLoad);
-			var shaderData = new MiscShaderData(shaderAsset, pass ?? name);
+			shaderData = new MiscShaderData(shaderAsset, pass ?? name);
 			GameShaders.Misc["ConstellationsOfOrion:" + name] = shaderData;
 		}
 	}

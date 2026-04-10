@@ -122,7 +122,7 @@ namespace ConstellationsOfOrion.Graphics
             device.SamplerStates[0] = SamplerState.LinearClamp;
 
 
-            var shader = useShader ?? GameShaders.Misc["CoolWeapons:BasicPrimitiveShader"];
+            var shader = useShader ?? GameShaders.Misc["ConstellationsOfOrion:BaseVertex"];
 
             if (useScreenTransform)
             {
