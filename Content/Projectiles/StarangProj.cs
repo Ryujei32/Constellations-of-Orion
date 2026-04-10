@@ -12,14 +12,6 @@ namespace ConstellationsOfOrion.Content.Projectiles
 {
 	public class StarangProj : ModProjectile
 	{
-		public override void SetStaticDefaults()
-		{
-			// DisplayName.SetDefault("Starang");
-
-			ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
-			ProjectileID.Sets.TrailCacheLength[Projectile.type] = 5;
-		}
-
 		public override void SetDefaults()
 		{
 			Projectile.width = 26;
