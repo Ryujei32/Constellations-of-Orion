@@ -34,7 +34,7 @@ namespace ConstellationsOfOrion.Effects
 			}
 
 			// manual misc shader loading
-			LoadMiscShader("Flame", "FlamePass");
+			LoadMiscShader("Flame");
 		}
 
 		private void LoadScreenShader(string name, string path)
