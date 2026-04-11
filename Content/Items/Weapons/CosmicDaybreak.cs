@@ -19,8 +19,8 @@ namespace ConstellationsOfOrion.Content.Items.Weapons
         {
             Item.damage = 80;
             Item.DamageType = DamageClass.Ranged;
-            Item.width = 40;
-            Item.height = 40;
+            Item.width = 38;
+            Item.height = 38;
             Item.ResearchUnlockCount = 1;
             Item.useTime = 40;
             Item.useAnimation = 40;
@@ -108,8 +108,8 @@ namespace ConstellationsOfOrion.Content.Items.Weapons
 
         public override void SetDefaults()
         {
-            Projectile.width = 59;
-            Projectile.height = 14;
+            Projectile.width = 62;
+            Projectile.height = 18;
             Projectile.friendly = true;
             Projectile.hostile = false;
             Projectile.penetrate = -1;

@@ -18,8 +18,8 @@ namespace ConstellationsOfOrion.Content.Items.Weapons
             Item.damage = 62;
             Item.DamageType = DamageClass.Ranged;
 
-            Item.width = 64;
-            Item.height = 40;
+            Item.width = 50;
+            Item.height = 26;
 
             Item.useTime = 6;
             Item.useAnimation = 6;
@@ -35,21 +35,21 @@ namespace ConstellationsOfOrion.Content.Items.Weapons
             Item.UseSound = SoundID.Item158;
             Item.autoReuse = true;
 
-            
+
             Item.shoot = ProjectileID.Bullet;
             Item.shootSpeed = 16f;
 
-            
+
             Item.useAmmo = AmmoID.Bullet;
         }
 
-        
+
         public override Vector2? HoldoutOffset()
         {
             return new Vector2(-10f, 2f);
         }
 
-        
+
         public override bool Shoot(Player player,
             Terraria.DataStructures.EntitySource_ItemUse_WithAmmo source,
             Vector2 position,
@@ -64,13 +64,13 @@ namespace ConstellationsOfOrion.Content.Items.Weapons
                 source,
                 position,
                 perturbed,
-                type, 
+                type,
                 damage,
                 knockback,
                 player.whoAmI
             );
 
-            return false; 
+            return false;
         }
 
         public override void AddRecipes()
