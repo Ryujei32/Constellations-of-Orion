@@ -10,6 +10,8 @@ using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
 using ConstellationsOfOrion.Graphics;
+using MonoMod.Utils;
+using System.Linq;
 
 namespace ConstellationsOfOrion.Content.Items.Weapons
 {
@@ -375,7 +377,8 @@ namespace ConstellationsOfOrion.Content.Items.Weapons
 
             Vector2 halfSize = Projectile.Size * 0.5f;
             Vector2 direction = Projectile.velocity.SafeNormalize(Vector2.Zero);
-            Vector2 tipOffset = direction * (Projectile.width + 4f);
+            float tipPadding = 32f * MathHelper.Clamp(Projectile.velocity.Length() / 10f, 0, 1);
+            Vector2 tipOffset = direction * (Projectile.width * 0.5f + tipPadding);
 
             // Build positions without LINQ to avoid per-frame allocation
             Vector2[] oldPos = Projectile.oldPos;
