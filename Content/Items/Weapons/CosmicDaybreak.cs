@@ -63,7 +63,6 @@ namespace ConstellationsOfOrion.Content.Items.Weapons
 
     public class CosmicDaybreakProj : ModProjectile
     {
-        // --- Constants ---
         private const int AnimationTime = 30;
         private const int MaxHoldTime = 12;
         private const int ExplosionRadius = 80;
@@ -76,14 +75,12 @@ namespace ConstellationsOfOrion.Content.Items.Weapons
         private const float SwingBackFraction = 0.5f;
         private const float SwingForwardFraction = 6f;
 
-        // --- Colors (readonly, not re-allocated each frame) ---
         private static readonly Color FlameColor = Color.White;
         private static readonly Color InnerColor = Color.OrangeRed;
-        private static readonly Color OuterColor = new Color(114, 47, 110);
+        private static readonly Color OuterColor = new(114, 47, 110);
         private static readonly Vector3 LightColor = Color.OrangeRed.ToVector3() * 0.25f;
         private const float FlameSpeed = 20f;
 
-        // --- State ---
         private Vector2 shootVelocity;
         private float heldRotation;
         private float swingBackRotation;
@@ -97,7 +94,6 @@ namespace ConstellationsOfOrion.Content.Items.Weapons
         private Vector2 stuckOffset;
         private int storedDamage;
 
-        // Cached per-frame shoot direction to avoid recomputing
         private int ShootDirection => shootVelocity.X >= 0 ? 1 : -1;
 
         public override void SetStaticDefaults()
@@ -195,7 +191,7 @@ namespace ConstellationsOfOrion.Content.Items.Weapons
 
         private void UpdateFlight()
         {
-            // Delay tile collision to avoid self-hitting on spawn
+            // Delay tile collision
             Projectile.tileCollide = airTime >= TileCollideDelay;
             Projectile.rotation = Projectile.velocity.ToRotation();
             airTime++;
@@ -379,7 +375,7 @@ namespace ConstellationsOfOrion.Content.Items.Weapons
 
             Vector2 halfSize = Projectile.Size * 0.5f;
             Vector2 direction = Projectile.velocity.SafeNormalize(Vector2.Zero);
-            Vector2 tipOffset = direction * (Projectile.width * 0.5f + 16f);
+            Vector2 tipOffset = direction * (Projectile.width + 4f);
 
             // Build positions without LINQ to avoid per-frame allocation
             Vector2[] oldPos = Projectile.oldPos;
