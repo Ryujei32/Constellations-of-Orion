@@ -132,14 +132,10 @@ namespace ConstellationsOfOrion.Content.Items.Weapons
 
             UpdatePlayer(player);
 
-            if (player.PickAmmo(player.HeldItem, out _, out _, out _, out _, out int usedAmmoId) &&
-                !player.HasItem(usedAmmoId)
+            if (++ChargeTime >= MaxChargeTime * timingModifier &&
+                player.PickAmmo(player.HeldItem, out _, out _, out _, out _, out int usedAmmoId) &&
+                player.HasItem(usedAmmoId)
             )
-            {
-                return;
-            }
-
-            if (++ChargeTime >= MaxChargeTime * timingModifier)
             {
                 UpdateShoot(player);
                 Projectile.frameCounter++;
