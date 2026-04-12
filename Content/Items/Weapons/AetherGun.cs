@@ -7,6 +7,7 @@ using Terraria.GameContent;
 using Microsoft.Xna.Framework.Graphics;
 using Humanizer;
 using System;
+using ConstellationsOfOrion.Content.Projectiles;
 
 namespace ConstellationsOfOrion.Content.Items.Weapons
 {
@@ -73,7 +74,6 @@ namespace ConstellationsOfOrion.Content.Items.Weapons
             );
 
             return false;
-            return false;
         }
 
         public override void AddRecipes()
@@ -91,17 +91,16 @@ namespace ConstellationsOfOrion.Content.Items.Weapons
             get => (int)Projectile.ai[0];
             set => Projectile.ai[0] = value;
         }
-
-        private const int MaxChargeTime = 60;
-
-        private const int RecoilTime = 20;
+        private float timingModifier = 1f;
+        private const int MaxChargeTime = 30;
+        private const int RecoilTime = 10;
         private static int ItemType => ModContent.ItemType<AetherGun>();
 
         public override string Texture => "ConstellationsOfOrion/Content/Items/Weapons/AetherGun";
         public override void SetStaticDefaults()
         {
-            Projectile.width = 64;
-            Projectile.height = 40;
+            Projectile.width = 50;
+            Projectile.height = 26;
             Projectile.friendly = true;
             Projectile.hostile = false;
             Projectile.DamageType = DamageClass.Ranged;
@@ -133,7 +132,14 @@ namespace ConstellationsOfOrion.Content.Items.Weapons
 
             UpdatePlayer(player);
 
-            if (++ChargeTime >= MaxChargeTime)
+            if (player.PickAmmo(player.HeldItem, out _, out _, out _, out _, out int usedAmmoId) &&
+                !player.HasItem(usedAmmoId)
+            )
+            {
+                return;
+            }
+
+            if (++ChargeTime >= MaxChargeTime * timingModifier)
             {
                 UpdateShoot(player);
                 Projectile.frameCounter++;
@@ -166,68 +172,73 @@ namespace ConstellationsOfOrion.Content.Items.Weapons
             player.ChangeDir(aimDirection);
         }
 
+        private float recoilStartRotation;
+        private Vector2 recoilStartCenter;
+
         private void UpdateShoot(Player player)
         {
-            var recoilAngle = MathHelper.ToRadians(14) * Projectile.direction;
+            var recoilAngle = MathHelper.ToRadians(14) * Projectile.direction * timingModifier;
             var shootRotation = Projectile.velocity.ToRotation();
 
-            var twoThirdsRecoilTime = RecoilTime * 2f / 3f;
-            var oneThirdRecoilTime = RecoilTime / 3f;
+            var totalRecoilTime = RecoilTime * timingModifier;
+            var twoThirdsRecoilTime = totalRecoilTime * 2f / 3f;
+            var oneThirdRecoilTime = totalRecoilTime / 3f;
 
             var offset = Projectile.velocity * -12f;
             var center = player.RotatedRelativePoint(player.MountedCenter, true) + offset;
 
             if (Projectile.frameCounter == 0)
             {
-                var shootVelocity = Projectile.velocity * 16f;
-                var source = Projectile.GetSource_FromThis();
-                Projectile.NewProjectile(
-                    source,
-                    Projectile.Center + Projectile.velocity * 16f,
-                    shootVelocity,
-                    ProjectileID.WoodenArrowFriendly,
-                    Projectile.damage,
-                    Projectile.knockBack,
-                    player.whoAmI
-                );
+                recoilStartRotation = Projectile.rotation;
+                recoilStartCenter = center - Projectile.Center;
+
+                if (player.PickAmmo(player.HeldItem, out var ammoType, out var speed, out var damage, out var knockback, out int usedAmmoId) &&
+                    player.HasItem(usedAmmoId))
+                {
+                    var useAmmo = ammoType == ProjectileID.Bullet ? ModContent.ProjectileType<ConstelliteBulletProj>() : ammoType;
+                    var source = Projectile.GetSource_FromThis();
+                    var variantMaxAngle = MathHelper.ToRadians(6) * timingModifier;
+                    var variant = Main.rand.NextFloat(-variantMaxAngle, variantMaxAngle);
+                    var shootVelocity = Projectile.velocity.RotatedBy(variant) * speed;
+                    Projectile.NewProjectile(
+                        source,
+                        Projectile.Center + Projectile.velocity * 16f,
+                        shootVelocity,
+                        useAmmo,
+                        Projectile.damage + damage,
+                        Projectile.knockBack + knockback,
+                        player.whoAmI
+                    );
+                    player.ConsumeItem(usedAmmoId);
+                }
             }
+
+            var peakRotation = shootRotation - recoilAngle;
+            var peakCenter = center - Projectile.velocity;
+
             if (Projectile.frameCounter < twoThirdsRecoilTime)
             {
                 var prog = Projectile.frameCounter / twoThirdsRecoilTime;
-                prog = MathF.Log(1 + 9 * prog);
+                var t = MathF.Sqrt(prog);
 
-                Projectile.rotation = MathHelper.Lerp(
-                    Projectile.rotation,
-                    shootRotation - recoilAngle,
-                    prog
-                );
-
-                Projectile.Center = Vector2.Lerp(
-                    center,
-                    center - Projectile.velocity * 4f,
-                    prog
-                );
+                Projectile.rotation = MathHelper.Lerp(recoilStartRotation, peakRotation, t);
+                Projectile.Center = Vector2.Lerp(recoilStartCenter + center, peakCenter, t);
                 return;
             }
             else
             {
                 var prog = (Projectile.frameCounter - twoThirdsRecoilTime) / oneThirdRecoilTime;
-                Projectile.rotation = MathHelper.Lerp(
-                    Projectile.rotation,
-                    shootRotation,
-                    prog * prog
-                );
-                Projectile.Center = Vector2.Lerp(
-                    center - Projectile.velocity * 4f,
-                    center,
-                    prog * prog
-                );
+                var t = prog * prog * (3f - 2f * prog); // smoothstep
+
+                Projectile.rotation = MathHelper.Lerp(peakRotation, shootRotation, t);
+                Projectile.Center = Vector2.Lerp(peakCenter, center, t);
             }
 
-            if (Projectile.frameCounter >= RecoilTime)
+            if (Projectile.frameCounter >= totalRecoilTime)
             {
                 Projectile.frameCounter = -1;
                 ChargeTime = 0;
+                timingModifier = MathF.Max(timingModifier - 0.05f, 0.25f);
             }
         }
 
