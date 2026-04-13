@@ -349,8 +349,6 @@ namespace ConstellationsOfOrion.Content.Items.Weapons
 
         public override bool PreDraw(ref Color lightColor)
         {
-            DrawGlowmask(scaleMul: 1.2f, alphaMult: 0.5f);
-
             bool inFlight = target == null && holdTimer > MaxHoldTime;
 
             if (inFlight)

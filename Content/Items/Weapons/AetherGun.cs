@@ -173,69 +173,80 @@ namespace ConstellationsOfOrion.Content.Items.Weapons
 
         private void UpdateShoot(Player player)
         {
-            var recoilAngle = MathHelper.ToRadians(14) * Projectile.direction * timingModifier;
-            var shootRotation = Projectile.velocity.ToRotation();
-
-            var totalRecoilTime = RecoilTime * timingModifier;
-            var twoThirdsRecoilTime = totalRecoilTime * 2f / 3f;
-            var oneThirdRecoilTime = totalRecoilTime / 3f;
-
-            var offset = Projectile.velocity * -12f;
-            var center = player.RotatedRelativePoint(player.MountedCenter, true) + offset;
+            var center = player.RotatedRelativePoint(player.MountedCenter, true) + Projectile.velocity * -12f;
+            var totalRecoilTime = MathF.Max(RecoilTime * timingModifier, 2f);
 
             if (Projectile.frameCounter == 0)
-            {
-                recoilStartRotation = Projectile.rotation;
-                recoilStartCenter = center - Projectile.Center;
+                InitShot(player, center);
 
-                if (player.PickAmmo(player.HeldItem, out var ammoType, out var speed, out var damage, out var knockback, out int usedAmmoId) &&
-                    player.HasItem(usedAmmoId))
-                {
-                    var useAmmo = ammoType == ProjectileID.Bullet ? ModContent.ProjectileType<ConstelliteBulletProj>() : ammoType;
-                    var source = Projectile.GetSource_FromThis();
-                    var variantMaxAngle = MathHelper.ToRadians(6) * timingModifier;
-                    var variant = Main.rand.NextFloat(-variantMaxAngle, variantMaxAngle);
-                    var shootVelocity = Projectile.velocity.RotatedBy(variant) * speed;
-                    Projectile.NewProjectile(
-                        source,
-                        Projectile.Center + Projectile.velocity * 16f,
-                        shootVelocity,
-                        useAmmo,
-                        Projectile.damage + damage,
-                        Projectile.knockBack + knockback,
-                        player.whoAmI
-                    );
-                    player.ConsumeItem(usedAmmoId);
-                }
-            }
+            ApplyRecoilTransform(center, totalRecoilTime);
 
-            var peakRotation = shootRotation - recoilAngle;
-            var peakCenter = center - Projectile.velocity;
+            if (Projectile.frameCounter >= totalRecoilTime)
+                FinishRecoil();
+        }
 
-            if (Projectile.frameCounter < twoThirdsRecoilTime)
-            {
-                var prog = Projectile.frameCounter / twoThirdsRecoilTime;
-                var t = MathF.Sqrt(prog);
+        private void InitShot(Player player, Vector2 center)
+        {
+            recoilStartRotation = Projectile.rotation;
+            recoilStartCenter = center;
 
-                Projectile.rotation = MathHelper.Lerp(recoilStartRotation, peakRotation, t);
-                Projectile.Center = Vector2.Lerp(recoilStartCenter + center, peakCenter, t);
+            if (!player.PickAmmo(player.HeldItem, out var ammoType, out var speed, out var damage, out var knockback, out int usedAmmoId)
+                || !player.HasItem(usedAmmoId))
                 return;
+
+            var useAmmo = ammoType == ProjectileID.Bullet
+                ? ModContent.ProjectileType<ConstelliteBulletProj>()
+                : ammoType;
+
+            var spread = MathHelper.ToRadians(8) * timingModifier;
+            var shootVelocity = Projectile.velocity.RotatedBy(Main.rand.NextFloat(-spread, spread)) * speed;
+
+            Projectile.NewProjectile(
+                Projectile.GetSource_FromThis(),
+                Projectile.Center + Projectile.velocity * 16f,
+                shootVelocity,
+                useAmmo,
+                Projectile.damage + damage,
+                Projectile.knockBack + knockback,
+                player.whoAmI
+            );
+
+            player.ConsumeItem(usedAmmoId);
+        }
+
+        private void ApplyRecoilTransform(Vector2 center, float totalRecoilTime)
+        {
+            var shootRotation = Projectile.velocity.ToRotation();
+            var recoilAngle = MathHelper.ToRadians(14) * Projectile.direction * timingModifier;
+
+            var kickTime = MathF.Max(totalRecoilTime * 2f / 3f, 1f);
+            var returnTime = MathF.Max(totalRecoilTime - kickTime, 1f);
+
+            float t;
+
+            if (totalRecoilTime <= 2f)
+            {
+                t = Projectile.frameCounter == 0 ? 1f : 0f;
+            }
+            else if (Projectile.frameCounter < kickTime)
+            {
+                t = MathF.Sqrt(Projectile.frameCounter / kickTime);
             }
             else
             {
-                var prog = (Projectile.frameCounter - twoThirdsRecoilTime) / oneThirdRecoilTime;
-                var t = prog * prog * (3f - 2f * prog); // smoothstep
-
-                Projectile.rotation = MathHelper.Lerp(peakRotation, shootRotation, t);
-                Projectile.Center = Vector2.Lerp(peakCenter, center, t);
+                var prog = (Projectile.frameCounter - kickTime) / returnTime;
+                t = 1f - prog * prog * (3f - 2f * prog);
             }
 
-            if (Projectile.frameCounter >= totalRecoilTime)
-            {
-                Projectile.frameCounter = -1;
-                ChargeTime = 0;
-                timingModifier = MathF.Max(timingModifier - 0.05f, 0.25f);
-            }
+            Projectile.rotation = MathHelper.Lerp(shootRotation, shootRotation - recoilAngle, t);
+            Projectile.Center = center + Projectile.velocity * -t; // pure offset from live center
+        }
+
+        private void FinishRecoil()
+        {
+            Projectile.frameCounter = -1;
+            ChargeTime = 0;
+            timingModifier = MathF.Max(timingModifier - 0.05f, 0.25f);
         }
 
         public override bool PreDraw(ref Color lightColor)
