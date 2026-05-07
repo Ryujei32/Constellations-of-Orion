@@ -1,0 +1,79 @@
+﻿using Microsoft.Xna.Framework;
+using Terraria;
+using Terraria.ID;
+using Terraria.ModLoader;
+
+namespace ConstellationsOfOrion.Content.Projectiles.Pets
+{
+	public class StarryPrincePet : ModProjectile
+	{
+		public override void SetStaticDefaults()
+		{
+			DisplayName.SetDefault("Starry Prince");
+
+			Main.projFrames[Projectile.type] = 5; // ⭐ your 5-frame sprite
+
+			Main.projPet[Projectile.type] = true;
+		}
+
+		public override void SetDefaults()
+		{
+			Projectile.width = 32;
+			Projectile.height = 32;
+
+			Projectile.tileCollide = false;
+			Projectile.ignoreWater = true;
+
+			Projectile.penetrate = -1;
+
+			Projectile.netImportant = true;
+		}
+
+		public override void AI()
+		{
+			Player player = Main.player[Projectile.owner];
+
+			if (!player.active)
+			{
+				Projectile.Kill();
+				return;
+			}
+
+			if (player.dead)
+			{
+				player.ClearBuff(ModContent.BuffType<Content.Buffs.StarryPrinceBuff>());
+			}
+
+			if (player.HasBuff(ModContent.BuffType<Content.Buffs.StarryPrinceBuff>()))
+			{
+				Projectile.timeLeft = 2;
+			}
+
+			// ⭐ SIMPLE FOLLOW AI
+			Vector2 targetPos = player.Center + new Vector2(-40 * player.direction, -30);
+			Vector2 move = targetPos - Projectile.Center;
+
+			float speed = 6f;
+
+			if (move.Length() > 200f)
+				speed = 10f;
+
+			if (move != Vector2.Zero)
+				move.Normalize();
+
+			Projectile.velocity = (Projectile.velocity * 20f + move * speed) / 21f;
+
+			// ⭐ ANIMATION
+			Projectile.frameCounter++;
+
+			if (Projectile.frameCounter >= 6)
+			{
+				Projectile.frameCounter = 0;
+				Projectile.frame++;
+
+				if (Projectile.frame >= 5)
+					Projectile.frame = 0;
+			}
+		}
+	}
+}

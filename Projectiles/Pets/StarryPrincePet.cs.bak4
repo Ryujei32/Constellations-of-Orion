@@ -1,0 +1,125 @@
+﻿using System;
+using Microsoft.Xna.Framework;
+using Terraria;
+using Terraria.ID;
+using Terraria.ModLoader;
+
+namespace ConstellationsOfOrion.Content.Projectiles.Pets
+{
+	public class StarryPrincePet : ModProjectile
+	{
+		public override void SetStaticDefaults()
+		{
+			DisplayName.SetDefault("Starry Prince");
+
+			Main.projFrames[Projectile.type] = 5;
+			Main.projPet[Projectile.type] = true;
+		}
+
+		public override void SetDefaults()
+		{
+			Projectile.width = 32;
+			Projectile.height = 32;
+
+			Projectile.tileCollide = true;
+			Projectile.ignoreWater = true;
+
+			Projectile.penetrate = -1;
+			Projectile.netImportant = true;
+		}
+
+		public override void AI()
+		{
+			Player player = Main.player[Projectile.owner];
+
+			if (!player.active)
+			{
+				Projectile.Kill();
+				return;
+			}
+
+			if (player.dead)
+			{
+				player.ClearBuff(ModContent.BuffType<Content.Buffs.StarryPrinceBuff>());
+			}
+
+			if (player.HasBuff(ModContent.BuffType<Content.Buffs.StarryPrinceBuff>()))
+			{
+				Projectile.timeLeft = 2;
+			}
+
+			// ⭐ DISTANCE CHECK
+			float distance = Vector2.Distance(Projectile.Center, player.Center);
+
+			// ⭐ TELEPORT IF VERY FAR (FIXES FALLING FOREVER)
+			if (distance > 1000f)
+			{
+				Projectile.Center = player.Center;
+				Projectile.velocity = Vector2.Zero;
+			}
+
+			// ⭐ GRAVITY
+			Projectile.velocity.Y += 0.4f;
+			if (Projectile.velocity.Y > 10f)
+				Projectile.velocity.Y = 10f;
+
+			// ⭐ TARGET POSITION (SLIGHT OFFSET)
+			Vector2 target = player.Center + new Vector2(-40 * player.direction, 0);
+
+			// ⭐ DIRECTION
+			float moveSpeed = 4.5f; // ⭐ FASTER THAN BEFORE
+
+			if (Projectile.Center.X < target.X - 20f)
+				Projectile.velocity.X = moveSpeed;
+			else if (Projectile.Center.X > target.X + 20f)
+				Projectile.velocity.X = -moveSpeed;
+			else
+				Projectile.velocity.X *= 0.85f;
+
+			// ⭐ AIR CONTROL (CRITICAL FIX)
+			if (Projectile.velocity.Y != 0f)
+			{
+				Projectile.velocity.X *= 0.98f;
+			}
+
+			// ⭐ JUMP LOGIC (SMARTER)
+			if (Projectile.velocity.Y == 0f)
+			{
+				if (distance > 120f)
+				{
+					// BIG JUMP TO CATCH UP
+					Projectile.velocity.Y = -8f;
+				}
+				else if (Math.Abs(Projectile.velocity.X) > 1f)
+				{
+					// NORMAL HOP
+					Projectile.velocity.Y = -6f;
+				}
+			}
+
+			// ⭐ EXTRA CATCH-UP BOOST
+			if (distance > 300f)
+			{
+				Projectile.velocity.X *= 1.2f;
+			}
+
+			// ⭐ FACE DIRECTION
+			if (Projectile.velocity.X > 0.2f)
+				Projectile.spriteDirection = 1;
+			else if (Projectile.velocity.X < -0.2f)
+				Projectile.spriteDirection = -1;
+
+			// ⭐ ANIMATION
+			Projectile.frameCounter++;
+
+			if (Projectile.frameCounter >= 6)
+			{
+				Projectile.frameCounter = 0;
+				Projectile.frame++;
+
+				if (Projectile.frame >= 5)
+					Projectile.frame = 0;
+			}
+		}
+	}
+}
