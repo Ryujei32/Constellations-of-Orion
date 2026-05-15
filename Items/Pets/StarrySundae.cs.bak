@@ -1,0 +1,52 @@
+﻿using Terraria;
+using Terraria.ID;
+using Terraria.ModLoader;
+using System.Collections.Generic;
+
+namespace ConstellationsOfOrion.Content.Items.Pets
+{
+	public class StarrySundae : ModItem
+	{
+		public override void SetStaticDefaults()
+		{
+			DisplayName.SetDefault("Starry Sundae");
+
+			Item.ResearchUnlockCount = 1;
+		}
+
+		public override void SetDefaults()
+		{
+			Item.width = 32;
+			Item.height = 32;
+
+			Item.useStyle = ItemUseStyleID.HoldUp;
+			Item.useTime = 20;
+			Item.useAnimation = 20;
+
+			Item.noMelee = true;
+
+			Item.value = Item.buyPrice(gold: 2);
+			Item.rare = ItemRarityID.LightRed;
+
+			Item.UseSound = SoundID.Item2;
+
+			Item.buffType = ModContent.BuffType<Content.Buffs.StarryPrinceBuff>();
+			Item.shoot = ModContent.ProjectileType<Content.Projectiles.Pets.StarryPrincePet>();
+
+			Item.buffTime = 3600;
+		}
+
+		public override void ModifyTooltips(List<TooltipLine> tooltips)
+		{
+			tooltips.Add(new TooltipLine(Mod, "Pet",
+				"Summons the Starry Prince"));
+		}
+
+		// ⭐ FIXED RETURN TYPE (bool?)
+		public override bool? UseItem(Player player)
+		{
+			player.AddBuff(Item.buffType, 3600);
+			return true;
+		}
+	}
+}
