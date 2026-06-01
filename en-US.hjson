@@ -131,6 +131,7 @@ Mods: {
 		NPCs: {
 			StarlitSlime.DisplayName: Starlit Slime
 			StarliteSlime.DisplayName: Starlite Slime
+			CosmicAstraeus.DisplayName: Cosmic Astraeus
 		}
 
 		Projectiles: {
@@ -143,6 +144,9 @@ Mods: {
 			StellarLashProj.DisplayName: Stellar Lash Proj
 			StarryPrincePet.DisplayName: Starry Prince Pet
 			StarangProj.DisplayName: Starang Proj
+			AetherGunHeld.DisplayName: Aether Gun Held
+			FallenCrystalstar.DisplayName: Fallen Crystalstar
+			SunBeam.DisplayName: Sun Beam
 		}
 
 		Buffs: {

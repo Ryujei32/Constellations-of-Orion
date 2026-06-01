@@ -34,7 +34,6 @@ namespace ConstellationsOfOrion.Effects
 			}
 
 			// manual misc shader loading
-
 			LoadMiscShader("BaseVertex", out MiscShaderData baseVertexShader);
 			baseVertexShader.UseOpacity(1f); // load defaults
 			baseVertexShader.UseSaturation(1f);
